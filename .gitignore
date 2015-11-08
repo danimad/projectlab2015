@@ -3,7 +3,10 @@
 *.lo
 *.o
 *.obj
+<<<<<<< HEAD
 *.out
+=======
+>>>>>>> a0c8fe6138e7886b68f3d8844223e0fc61c89136
 
 # Precompiled Headers
 *.gch
@@ -17,23 +20,30 @@
 # Fortran module files
 *.mod
 
+<<<<<<< HEAD
 # XCode file and other mac files
 onlab_num.xcodeproj
 .DS_Store
 build.ninja
 
+=======
+>>>>>>> a0c8fe6138e7886b68f3d8844223e0fc61c89136
 # Compiled Static libraries
 *.lai
 *.la
 *.a
 *.lib
+<<<<<<< HEAD
 *.1
 *.dSYM
+=======
+>>>>>>> a0c8fe6138e7886b68f3d8844223e0fc61c89136
 
 # Executables
 *.exe
 *.out
 *.app
+<<<<<<< HEAD
 
 # Files
 doc/
@@ -46,3 +56,5 @@ include/
 bin/
 build/
 
+=======
+>>>>>>> a0c8fe6138e7886b68f3d8844223e0fc61c89136
