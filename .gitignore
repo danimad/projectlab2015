@@ -1,0 +1,47 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+*.out
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+
+# XCode file and other mac files
+onlab_num.xcodeproj
+*/.DS_Store
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+*.1
+*.dSYM
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Files
+doc/
+doc/schedule.md
+doc/thesis.latex
+doc/library.bib
+
+# Folders
+include/
+bin/
+build/
+
