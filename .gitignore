@@ -19,7 +19,8 @@
 
 # XCode file and other mac files
 onlab_num.xcodeproj
-*/.DS_Store
+.DS_Store
+build.ninja
 
 # Compiled Static libraries
 *.lai
