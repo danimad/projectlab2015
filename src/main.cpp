@@ -20,8 +20,17 @@ const int resolution = 64;
 
 TestFunction2D tf;
 
+// TODO: template
+// TODO: double -> Real
+// TODO: make box, and get integrate region from that
+// TODO: implicit and explicit boundary
+// TODO: make integrate function in seperate file
 
-void integrate(double const &x_min, double const &x_max, double const &y_min, double const &y_max,int const &resolution, vector<Point> &vec, TestFunction2D func) {
+double simpson_rule(double &x, double &y, const int &dh, TestFunction1D tf) {
+    return dh / 6 * (tf(x) + 4 * tf(0.5 * x + dh) + tf(x+dh));
+};
+
+void integrate(double const &x_min, double const &x_max, double const &y_min, double const &y_max,const int &resolution, vector<Point> &vec, TestFunction2D func) {
 
     const double dx = (x_max - x_min) / resolution;
     const double dy = (y_max - y_min) / resolution;
@@ -49,11 +58,11 @@ int main() {
     integrate(a, b, c, d, resolution, mesh, tf);
     
     for(auto i = 0; i < mesh.size(); i++) {
-        result = result + mesh[i].getz();
+        result = result + mesh[i].get_z();
     };
     
-    cout << result << endl;
+    cout << "integral: " << result << endl;
     
-    cout << mesh.size();
+    cout << "number of points: " << mesh.size();
 
    };

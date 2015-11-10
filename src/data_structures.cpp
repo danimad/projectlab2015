@@ -10,37 +10,41 @@
 
 typedef double Real;
 
-Point::Point() {xx = 0; yy = 0; zz = 0;};
+// Point data structure
+Point::Point() {m_x = 0; m_y = 0; m_z = 0;};
     
-Point::Point(double x_, double y_, double z_) {
-        xx = x_;
-        yy = y_;
-        zz = z_;
+Point::Point(double x_, double y_, double z_) :
+        m_x(x_),
+        m_y(y_),
+        m_z(z_)
+{
 };
 
 Point::~Point() {};
     
-void Point::setx(double x_) { xx = x_; };
-void Point::sety(double y_) { yy = y_; };
-void Point::setz(double z_) { zz = z_; };
+//void Point::set_id(unsigned int id_) { point_id = id_; };
+
+//const int& Point::id() { return point_id; };
+
+double Point::x() { return m_x; };
+double Point::y() { return m_y; };
+double Point::z() { return m_z; };
+
+// Half Edge data structure
+// Based on Triangulation Template Library
+// https://github.com/SINTEF-Geometry/TTL
+HalfEdge::HalfEdge() {src = nullptr; inverseEdge = nullptr; nextEdge = nullptr; isLeading = false;};
     
-double Point::getx() { return xx; };
-double Point::gety() { return yy; };
-double Point::getz() { return zz; };
+HalfEdge::~HalfEdge() { if(inverseEdge) inverseEdge->setInvEdge(nullptr); };
 
+void HalfEdge::setInvEdge(HalfEdge* invEdge) : inverseEdge(invEdge) {};
+void HalfEdge::setNextEdge(HalfEdge* nextEdge_) : nextEdge(nextEdge_) {};
+void HalfEdge::srcPoint(Point* srcPoint) : src(srcPoint) {};
+void HalfEdge::leading(bool isLeading_) : isLeading(isLeading_) {};
 
-// template<class POINT>
-// class Triangle {
-//     public:
-//         Triangle(POINT& a_, POINT& b_, POINT& c_) {
-//             a = a_;
-//             b = b_;
-//             c = c_;
-//         };
-//         ~Triangle();
+HalfEdge* HalfEdge::getInvEdge() { return invEdge };
+HalfEdge* HalfEdge::getNextEdge() { return nextEdge };
+HalfEdge* HalfEdge::getSrcPoint() { return src };
+    
+HalfEdge::isLeadingEdge() { return isLeading; };
 
-//     private:
-//         POINT& a;
-//         POINT& b;
-//         POINT& c;
-// };
