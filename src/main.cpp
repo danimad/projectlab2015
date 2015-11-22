@@ -2,63 +2,119 @@
 #include <cmath>
 #include <math.h>
 #include <numeric>
-#include "test_function.h"
-#include "data_structures.h"
 #include <vector>
 #include <algorithm>
 #include <functional>
 
+#include "test_function.h"
+#include "data_structures.h"
+#include "common.h"
+
 using namespace std;
 
-const double a = 0.0;
-const double b = 5.0;
-const double c = 5.0;
-const double d = 10.0;
+Point<Real> kBoxMin(0.0, 0.0, 0.0);
+Point<Real> kBoxMax(5.0, 5.0, 0.0);
 
-const int resolution = 64;
+const int kResolution = 16;
 
 
 TestFunction2D tf;
 
-// TODO: template
-// TODO: double -> Real
 // TODO: make box, and get integrate region from that
 // TODO: implicit and explicit boundary
 // TODO: make integrate function in seperate file
 
-double simpson_rule(double &x, double &y, const int &dh, TestFunction1D tf) {
-    return dh / 6 * (tf(x) + 4 * tf(0.5 * x + dh) + tf(x+dh));
-};
+// TODO: normalize ot [-1,1] so i can implement Gauss rule
+// TODO: restructure function so it can run in parallel
+void integrate(Point<Real> &kBoxMin, Point<Real> &kBoxMax, const int &kResolution, vector<Point<Real>> &vec, TestFunction2D &func) {
 
-void integrate(double const &x_min, double const &x_max, double const &y_min, double const &y_max,const int &resolution, vector<Point> &vec, TestFunction2D func) {
-
-    const double dx = (x_max - x_min) / resolution;
-    const double dy = (y_max - y_min) / resolution;
+    Real dx = (kBoxMax.x() - kBoxMin.x()) / kResolution;
+    Real dy = (kBoxMax.y() - kBoxMin.y()) / kResolution;
     
-    for (int i = 0; i < resolution; i++) {
+   
+    for (int i = 0; i < kResolution; i++) {
 
-        for (int j = 0; j < resolution; j++) {
+        for (int j = 0; j < kResolution; j++) {
             
-            double step_x = x_min + i * dx;
-            double step_y = y_min + j * dy;
+            Real step_x = kBoxMin.x() + i * dx;
+            Real step_y = kBoxMin.y() + j * dy;
+            // TODO: solve it that i don't have declare dx,dy every time
+            // TODO: put quadrature rule in a different file
+            Real step_dx = step_x + dx;
+            Real step_dy = step_y + dy;
+            Real z_val = 0.25 * dx * dy * (func(step_x, step_y) + func(step_dx, step_y) + func(step_x, step_dy) + func(step_dx, step_dy) );
             
-            vec.push_back( Point(step_x, step_y, 0.5 * (func(step_x,step_y) + func(step_x + dx,step_y + dy)) * dx * dy));
+            vec.push_back( Point<Real>(step_x, step_y, z_val));
+            
+//            vec.push_back( Point(step_x, step_y, 0.5 * (func(step_x,step_y) + func(step_x + dx,step_y + dy)) * dx * dy));
         };
     };
 };
+// Algorithm:
+// 1. init triangle
+// 2. insert point
+// 3. find triangle that containst point
+// 4. split triangle to three smaller triangles
+// 5. examine the new traingles and neighbouring traingles pairs for local optimum
+// 6. if not optimal swap edges
+// 7. delete big triangle
+//
+void delaunay(Point<Real> &kBoxMin, Point<Real> &kBoxMax, const int &kResolution) {
+    
+    // point number half on border half inside border
+//    const int points = sqrt(kResolution);
+    
+    // initialize box
+    Point<Real> dl(kBoxMin.x(), kBoxMin.y(), 0.0);
+    Point<Real> dr(kBoxMax.x(), kBoxMin.y(), 0.0);
+    Point<Real> ur(kBoxMax.x(), kBoxMax.y(), 0.0);
+    Point<Real> ul(kBoxMin.x(), kBoxMax.y(), 0.0);
+    
+    // six initial edges 3x lower tri, 3x upper tri, CCW
+//    HalfEdge<Point<Real>, HalfEdge*> down;
+//    HalfEdge up;
+//    
+//    HalfEdge ddiag;
+//    HalfEdge udiag;
+//    
+//    HalfEdge left;
+//    HalfEdge right;
+    
+//    // lower triangle
+//    down.setSrcPoint(&dl);
+//    down.setNextEdge(&ddiag);
+//    
+//    ddiag.setSrcPoint(&dr);
+//    ddiag.setNextEdge(&left);
+//    ddiag.setInvEdge(&udiag);
+//    
+//    left.setSrcPoint(&ul);
+//    left.setNextEdge(&down);
+//    
+//    // upper triangle
+//    right.setSrcPoint(&dr);
+//    right.setNextEdge(&up);
+//    
+//    udiag.setSrcPoint(&ul);
+//    udiag.setNextEdge(&right);
+//    udiag.setInvEdge(&ddiag);
+//    
+//    up.setSrcPoint(&ur);
+//    up.setNextEdge(&udiag);
+    
 
-
+}
 
 int main() {
     
-    vector<Point> mesh;
+    vector<Point<Real>> mesh;
     
-    double result = 0.0;
-    
-    integrate(a, b, c, d, resolution, mesh, tf);
+    Real result = 0.0;
+            
+    integrate(kBoxMin, kBoxMax, kResolution, mesh, tf);
     
     for(auto i = 0; i < mesh.size(); i++) {
-        result = result + mesh[i].get_z();
+        result = result + mesh[i].z();
     };
     
     cout << "integral: " << result << endl;

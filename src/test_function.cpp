@@ -14,16 +14,25 @@
 // template<typename T>
 // void Integrable(T)
 
-double TestFunction1D::operator() (double x) {
-        
-        return x*x;
-        // return sin(3*x)/3 + sin(2*x)/2 + sin(x);
-        // return -((x-1)*(x-1)) + 1;
-        
-};
-
-double TestFunction2D::operator() (double x, double y) {
+Real TestFunction1D::operator() (Real &x) {
     
-    return x*x + sin(y);
+    return x * x;
+    
+};
+
+Real TestFunction2D::operator() (Real &x, Real &y) {
+    
+    return x * x + sin(y*y);
 
 };
+
+//double TrapezoidRule2D::operator() (double &x, double &y, double &dx, double &dy, TestFunction2D &func) {
+//    
+//    return 0.5 * dx * dy * (func(x, y) + func(x+dx, y+dy));
+//    
+//};
+
+//double SimpsonRule::operator() (double &x, double &y, int &dx, int &dy, TestFunction2D tf) {
+//    
+//    return (dx * dy) / 6 * (tf(x,y) + 4 * tf(0.5 * x + dx, 0.5 * x + dy) + tf(x+dx,y+dy));
+//};

@@ -55,6 +55,8 @@ doc/library.bib
 include/
 bin/
 build/
+src/html
+src/latex
 
 =======
 >>>>>>> a0c8fe6138e7886b68f3d8844223e0fc61c89136
